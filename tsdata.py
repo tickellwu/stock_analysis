@@ -9,7 +9,7 @@ class tsdata:
     def __init__(self, tc: tsclass, code):
         self._tsm = tc
         self._code = code
-        self._data = self._tsm.getdata(code)
+        self._data = self._tsm.get_daily_data(code)
 
     def save_pic(self, plt, name):
         path = "tmp" + datetime.date.today().strftime('%Y%m%d')
@@ -29,6 +29,7 @@ class tsdata:
             rsi = data.sort_values(by=['trade_date'])
             plt.plot(rsi["trade_date"][-30:], rsi[name][-30:])
         self.save_pic(plt, self._code[:6] + 'RSI.png')
+        plt.close()
         return data
 
     def ma(self):
@@ -39,7 +40,6 @@ class tsdata:
         plt.figure(figsize=(30, 10))
         for i in range(len(span)):
             name = 'MA_' + str(span[i])
-            print(data)
             data[name] = TA.VAMA(data_copy, period=span[i])
             ma = data.sort_values(by=['trade_date'])
             plt.plot(ma["trade_date"][-30:], ma[name][-30:])

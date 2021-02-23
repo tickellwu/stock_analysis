@@ -3,6 +3,8 @@ import datetime
 import matplotlib.pyplot as plt
 from finta import TA
 from tsmodel import tsclass
+from tickell_log import log
+
 #from sqlalchemy import Column, String, create_engine
 from sqlalchemy.orm import sessionmaker
 #from sqlalchemy.ext.declarative import declarative_base
@@ -33,12 +35,15 @@ class tsdata:
             plt.plot(rsi["trade_date"][-30:], rsi[name][-30:])
         self.save_pic(plt, self._code[:6] + 'RSI.png')
         plt.close()
-        #insert all data to db
-        rsi_copy = data.loc[:300, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
-        #insert new data to db
-        #rsi_copy = data.loc[:0, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
-
-        rsi_copy.to_sql('rsi_list', con=engine, if_exists="append")
+        try:
+            #insert all data to db
+            rsi_copy = data.loc[:300, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
+            #insert new data to db
+            #rsi_copy = data.loc[:0, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
+            rsi_copy.to_sql('rsi_list', con=engine, if_exists="append")
+        except Exception:
+            log("err " + " " + self._code + " " + str(rsi_copy))
+            return data
         return data
 
     def ma(self):

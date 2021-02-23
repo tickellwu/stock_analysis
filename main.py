@@ -4,13 +4,12 @@ import os
 import tsmodel
 import tsdata as td
 import datetime
-import time
+from tickell_log import log
 from sqlalchemy import create_engine
 #import save_date_sql
 
 buyed = ["000970.SZ", "600029.SH", "600115.SH", "600297.SH", "600990.SH"]
 
-flog = open("db.log", "a+")
 DB_IP = "192.168.2.26"
 DB_PORT = 3333
 DB_USERNAME = "grafana"
@@ -19,11 +18,6 @@ DB_DBNAME = "stock_db"
 #db = MySQLdb.connect(host = DB_IP, port = DB_PORT, user = DB_USERNAME, passwd = DB_PASSWD, db = DB_DBNAME, charset = "utf8")
 
 buyed = ["000970.SZ", "600029.SH", "600115.SH", "600297.SH", "600990.SH"]
-
-def log(str):
-    flog.write(time.asctime(time.localtime(time.time())) + "  " + str + '\n')
-    flog.flush()
-
 
 def save_pic(plt, name):
     path = "tmp" + datetime.date.today().strftime('%Y%m%d')

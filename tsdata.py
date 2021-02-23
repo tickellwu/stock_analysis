@@ -3,6 +3,9 @@ import datetime
 import matplotlib.pyplot as plt
 from finta import TA
 from tsmodel import tsclass
+#from sqlalchemy import Column, String, create_engine
+from sqlalchemy.orm import sessionmaker
+#from sqlalchemy.ext.declarative import declarative_base
 import pandas as pd
 
 class tsdata:
@@ -18,7 +21,7 @@ class tsdata:
         plt.savefig(path + '/' + name)
         return
 
-    def rsi(self):
+    def rsi(self, engine):
         span = [6, 12, 24]
         data = self._data
         data_copy = data.sort_values(by=['trade_date'])
@@ -30,6 +33,12 @@ class tsdata:
             plt.plot(rsi["trade_date"][-30:], rsi[name][-30:])
         self.save_pic(plt, self._code[:6] + 'RSI.png')
         plt.close()
+        #insert all data to db
+        rsi_copy = data.loc[:300, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
+        #insert new data to db
+        #rsi_copy = data.loc[:0, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
+
+        rsi_copy.to_sql('rsi_list', con=engine, if_exists="append")
         return data
 
     def ma(self):

@@ -3,6 +3,7 @@
 import os
 import tsmodel
 import tsdata as td
+import pandas as pd
 import datetime
 from tickell_log import log
 from sqlalchemy import create_engine
@@ -72,6 +73,11 @@ if __name__=="__main__":
 
         i = i + 1
         #ma = data.ma()
+    last_day = pd.DataFrame({'name': ['last_day', 'last_day_before'],
+                             'date': [rsi["trade_date"][0], rsi["trade_date"][1]]})
+    #print(last_day)
+    last_day.to_sql('day_list', con=engine, if_exists="replace")
+
     fo = open("resalt.txt", "w")
     fo.writelines(resault_code)
     fo.close()

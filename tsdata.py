@@ -35,14 +35,15 @@ class tsdata:
             plt.plot(rsi["trade_date"][-30:], rsi[name][-30:])
         self.save_pic(plt, self._code[:6] + 'RSI.png')
         plt.close()
+        log("info " + " " + self._code + " \n" + str(data))
         try:
             #insert all data to db
-            rsi_copy = data.loc[:300, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
+            #rsi_copy = data.loc[:300, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
             #insert new data to db
-            #rsi_copy = data.loc[:0, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
-            rsi_copy.to_sql('rsi_list', con=engine, if_exists="append")
+            rsi_copy = data.loc[:0, ['ts_code', 'trade_date', 'RSI_6', 'RSI_12', 'RSI_24']]
+            #rsi_copy.to_sql('rsi_list', con=engine, if_exists="append")
         except Exception:
-            log("err " + " " + self._code + " " + str(rsi_copy))
+            log("err " + " " + self._code + " \m" + str(data))
             return data
         return data
 
